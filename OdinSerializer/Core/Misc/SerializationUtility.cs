@@ -21,7 +21,6 @@ namespace OdinSerializer
     using System;
     using System.Collections.Generic;
     using System.IO;
-    using UnityEngine;
     using Utilities;
 
     /// <summary>
@@ -50,7 +49,7 @@ namespace OdinSerializer
                     return new JsonDataWriter(stream, context);
 
                 case DataFormat.Nodes:
-                    Debug.LogError("Cannot automatically create a writer for the format '" + DataFormat.Nodes + "', because it does not use a stream.");
+                    Logging.LogError("Cannot automatically create a writer for the format '" + DataFormat.Nodes + "', because it does not use a stream.");
                     return null;
 
                 default:
@@ -79,7 +78,7 @@ namespace OdinSerializer
                     return new JsonDataReader(stream, context);
 
                 case DataFormat.Nodes:
-                    Debug.LogError("Cannot automatically create a reader for the format '" + DataFormat.Nodes + "', because it does not use a stream.");
+                    Logging.LogError("Cannot automatically create a reader for the format '" + DataFormat.Nodes + "', because it does not use a stream.");
                     return null;
 
                 default:
@@ -178,6 +177,7 @@ namespace OdinSerializer
             writer.FlushToStream();
         }
 
+#if !DISABLE_UNITY
         /// <summary>
         /// Serializes the given value, using the given writer.
         /// </summary>
@@ -194,6 +194,7 @@ namespace OdinSerializer
                 unityObjects = unityResolver.Value.GetReferencedUnityObjects();
             }
         }
+#endif
 
         /// <summary>
         /// Serializes the given value using the given writer.
@@ -207,6 +208,7 @@ namespace OdinSerializer
             writer.FlushToStream();
         }
 
+#if !DISABLE_UNITY
         /// <summary>
         /// Serializes the given value, using the given writer.
         /// </summary>
@@ -224,8 +226,7 @@ namespace OdinSerializer
                 unityObjects = unityResolver.Value.GetReferencedUnityObjects();
             }
         }
-
-
+#endif
 
         /// <summary>
         /// Serializes the given value to a given stream in the specified format.
@@ -260,6 +261,7 @@ namespace OdinSerializer
             }
         }
 
+#if !DISABLE_UNITY
         /// <summary>
         /// Serializes the given value to a given stream in the specified format.
         /// </summary>
@@ -293,6 +295,7 @@ namespace OdinSerializer
                 cache.Dispose();
             }
         }
+#endif
 
         /// <summary>
         /// Serializes the given value to a given stream in the specified format.
@@ -328,6 +331,7 @@ namespace OdinSerializer
             }
         }
 
+#if !DISABLE_UNITY
         /// <summary>
         /// Serializes the given value to a given stream in the specified format.
         /// </summary>
@@ -362,6 +366,7 @@ namespace OdinSerializer
                 cache.Dispose();
             }
         }
+#endif
 
         /// <summary>
         /// Serializes the given value using the specified format, and returns the result as a byte array.
@@ -379,6 +384,7 @@ namespace OdinSerializer
             }
         }
 
+#if !DISABLE_UNITY
         /// <summary>
         /// Serializes the given value using the specified format, and returns the result as a byte array.
         /// </summary>
@@ -394,6 +400,7 @@ namespace OdinSerializer
                 return stream.Value.MemoryStream.ToArray();
             }
         }
+#endif
 
         /// <summary>
         /// Serializes the given value using the specified format, and returns the result as a byte array.
@@ -412,6 +419,7 @@ namespace OdinSerializer
             }
         }
 
+#if !DISABLE_UNITY
         /// <summary>
         /// Serializes the given value using the specified format and returns the result as a byte array.
         /// </summary>
@@ -429,6 +437,7 @@ namespace OdinSerializer
                 return stream.Value.MemoryStream.ToArray();
             }
         }
+#endif
 
         /// <summary>
         /// Deserializes a value from the given reader. This might fail with primitive values, as they don't come with metadata.
@@ -440,6 +449,7 @@ namespace OdinSerializer
             return Serializer.Get<object>().ReadValueWeak(reader);
         }
 
+#if !DISABLE_UNITY
         /// <summary>
         /// Deserializes a value from the given reader, using the given list of Unity objects for external index reference resolution. This might fail with primitive values, as they don't come with type metadata.
         /// </summary>
@@ -457,6 +467,7 @@ namespace OdinSerializer
                 return Serializer.Get<object>().ReadValueWeak(reader);
             }
         }
+#endif
 
         /// <summary>
         /// Deserializes a value from the given reader.
@@ -469,6 +480,7 @@ namespace OdinSerializer
             return Serializer.Get<T>().ReadValue(reader);
         }
 
+#if !DISABLE_UNITY
         /// <summary>
         /// Deserializes a value of a given type from the given reader, using the given list of Unity objects for external index reference resolution.
         /// </summary>
@@ -487,6 +499,7 @@ namespace OdinSerializer
                 return Serializer.Get<T>().ReadValue(reader);
             }
         }
+#endif
 
         /// <summary>
         /// Deserializes a value from the given stream in the given format. This might fail with primitive values, as they don't come with type metadata.
@@ -523,6 +536,7 @@ namespace OdinSerializer
             }
         }
 
+#if !DISABLE_UNITY
         /// <summary>
         /// Deserializes a value from the given stream in the given format, using the given list of Unity objects for external index reference resolution. This might fail with primitive values, as they don't come with type metadata.
         /// </summary>
@@ -558,6 +572,7 @@ namespace OdinSerializer
                 cache.Dispose();
             }
         }
+#endif
 
         /// <summary>
         /// Deserializes a value of a given type from the given stream in the given format.
@@ -595,6 +610,7 @@ namespace OdinSerializer
             }
         }
 
+#if !DISABLE_UNITY
         /// <summary>
         /// Deserializes a value of a given type from the given stream in the given format, using the given list of Unity objects for external index reference resolution.
         /// </summary>
@@ -631,6 +647,7 @@ namespace OdinSerializer
                 cache.Dispose();
             }
         }
+#endif
 
         /// <summary>
         /// Deserializes a value from the given byte array in the given format. This might fail with primitive values, as they don't come with type metadata.
@@ -649,6 +666,7 @@ namespace OdinSerializer
             }
         }
 
+#if !DISABLE_UNITY
         /// <summary>
         /// Deserializes a value from the given byte array in the given format, using the given list of Unity objects for external index reference resolution. This might fail with primitive values, as they don't come with type metadata.
         /// </summary>
@@ -665,6 +683,7 @@ namespace OdinSerializer
                 return DeserializeValueWeak(stream.Value.MemoryStream, format, referencedUnityObjects);
             }
         }
+#endif
 
         /// <summary>
         /// Deserializes a value of a given type from the given byte array in the given format.
@@ -684,6 +703,7 @@ namespace OdinSerializer
             }
         }
 
+#if !DISABLE_UNITY
         /// <summary>
         /// Deserializes a value of a given type from the given byte array in the given format, using the given list of Unity objects for external index reference resolution.
         /// </summary>
@@ -702,6 +722,7 @@ namespace OdinSerializer
                 return DeserializeValue<T>(stream.Value.MemoryStream, format, referencedUnityObjects, context);
             }
         }
+#endif
 
         /// <summary>
         /// Creates a deep copy of an object. Returns null if null. All Unity objects references will remain the same - they will not get copied.
@@ -725,10 +746,12 @@ namespace OdinSerializer
                 return obj;
             }
 
+#if !DISABLE_UNITY
             if (type.InheritsFrom(typeof(UnityEngine.Object)))
             {
                 return obj;
             }
+#endif
 
             using (var stream = CachedMemoryStream.Claim())
             using (var serContext = Cache<SerializationContext>.Claim())
@@ -737,10 +760,16 @@ namespace OdinSerializer
                 serContext.Value.Config.SerializationPolicy = SerializationPolicies.Everything;
                 deserContext.Value.Config.SerializationPolicy = SerializationPolicies.Everything;
 
+#if DISABLE_UNITY
+                SerializeValue(obj, stream.Value.MemoryStream, DataFormat.Binary, serContext);
+                stream.Value.MemoryStream.Position = 0;
+                return DeserializeValue<object>(stream.Value.MemoryStream, DataFormat.Binary, deserContext);
+#else
                 List<UnityEngine.Object> unityReferences;
                 SerializeValue(obj, stream.Value.MemoryStream, DataFormat.Binary, out unityReferences, serContext);
                 stream.Value.MemoryStream.Position = 0;
                 return DeserializeValue<object>(stream.Value.MemoryStream, DataFormat.Binary, unityReferences, deserContext);
+#endif
             }
         }
     }

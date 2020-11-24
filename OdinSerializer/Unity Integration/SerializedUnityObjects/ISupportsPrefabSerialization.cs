@@ -15,6 +15,9 @@
 // limitations under the License.
 // </copyright>
 //-----------------------------------------------------------------------
+
+#if !DISABLE_UNITY
+
 namespace OdinSerializer
 {
     /// <summary>
@@ -28,3 +31,5 @@ namespace OdinSerializer
         SerializationData SerializationData { get; set; }
     }
 }
+
+#endif

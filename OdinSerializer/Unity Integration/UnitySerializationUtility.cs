@@ -18,6 +18,8 @@
 
 //#define PREFAB_DEBUG
 
+#if !DISABLE_UNITY
+
 namespace OdinSerializer
 {
     using System.Globalization;
@@ -2783,3 +2785,5 @@ namespace OdinSerializer
 #endif
     }
 }
+
+#endif

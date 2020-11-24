@@ -12,7 +12,9 @@
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile>Unity Subset v3.5</TargetFrameworkProfile>
+    <!--
     <ProjectTypeGuids>{E097FAD1-6243-4DAD-9C02-E9B9EFC3FFC1};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+	-->
   </PropertyGroup>
   <PropertyGroup>
     <RunPostBuildEvent>Always</RunPostBuildEvent>
@@ -68,8 +70,34 @@
     <DebugType>pdbonly</DebugType>
     <DebugSymbols>true</DebugSymbols>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release Disable Unity JIT|AnyCPU'">
+    <OutputPath>bin\Release Disable Unity JIT\</OutputPath>
+    <NoWarn>CS1723, CS1723, CS1574, CS1584, CS1658</NoWarn>
+    <DefineConstants>DISABLE_UNITY;CAN_EMIT</DefineConstants>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <DocumentationFile>bin\Release Disable Unity JIT\OdinSerializer.xml</DocumentationFile>
+    <Optimize>true</Optimize>
+    <LangVersion>4</LangVersion>
+    <ErrorReport>prompt</ErrorReport>
+    <DebugType>pdbonly</DebugType>
+    <DebugSymbols>true</DebugSymbols>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release Disable Unity AOT|AnyCPU'">
+    <OutputPath>bin\Release Disable Unity AOT\</OutputPath>
+    <NoWarn>CS1723, CS1723, CS1574, CS1584, CS1658</NoWarn>
+    <DefineConstants>DISABLE_UNITY</DefineConstants>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <DocumentationFile>bin\Release Disable Unity AOT\OdinSerializer.xml</DocumentationFile>
+    <Optimize>true</Optimize>
+    <LangVersion>4</LangVersion>
+    <ErrorReport>prompt</ErrorReport>
+    <DebugType>pdbonly</DebugType>
+    <DebugSymbols>true</DebugSymbols>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
+  </ItemGroup>
+  <ItemGroup Condition="'$(Configuration.Contains(`Disable Unity`))' != 'true'">
     <Reference Include="UnityEditor">
       <HintPath>..\Libraries\Unity\UnityEditor.dll</HintPath>
       <Private>False</Private>
@@ -90,7 +118,7 @@
     <Compile Include="Unity Integration\AOTSupportScanner.cs" />
     <Compile Include="Unity Integration\OdinPrefabSerializationEditorUtility.cs" />
     <Compile Include="Unity Integration\SerializedUnityObjects\IOverridesSerializationPolicy.cs" />
-    <Compile Include="Utilities\Misc\AssemblyImportSettingsUtilities.cs" />
+    <Compile Include="Unity Integration\AssemblyImportSettingsUtilities.cs" />
     <Compile Include="Core\FormatterLocators\ArrayFormatterLocator.cs" />
     <Compile Include="Core\FormatterLocators\DelegateFormatterLocator.cs" />
     <Compile Include="Core\Misc\IAskIfCanFormatTypes.cs" />
@@ -112,7 +140,7 @@
     <Compile Include="Utilities\Extensions\PropertyInfoExtensions.cs" />
     <Compile Include="Utilities\Extensions\StringExtensions.cs" />
     <Compile Include="Utilities\Extensions\TypeExtensions.cs" />
-    <Compile Include="Utilities\Extensions\UnityExtensions.cs" />
+    <Compile Include="Unity Integration\UnityExtensions.cs" />
     <Compile Include="Utilities\Misc\Cache.cs" />
     <Compile Include="Utilities\Misc\DoubleLookupDictionary.cs" />
     <Compile Include="Utilities\Misc\EmitUtilities.cs" />
@@ -120,11 +148,12 @@
     <Compile Include="Utilities\Misc\Flags.cs" />
     <Compile Include="Utilities\Misc\ICacheNotificationReceiver.cs" />
     <Compile Include="Utilities\Misc\ImmutableList.cs" />
+    <Compile Include="Utilities\Misc\Logging.cs" />
     <Compile Include="Utilities\Misc\MemberAliasFieldInfo.cs" />
     <Compile Include="Utilities\Misc\MemberAliasMethodInfo.cs" />
     <Compile Include="Utilities\Misc\MemberAliasPropertyInfo.cs" />
     <Compile Include="Utilities\Misc\ReferenceEqualityComparer.cs" />
-    <Compile Include="Utilities\Misc\UnityVersion.cs" />
+    <Compile Include="Unity Integration\UnityVersion.cs" />
     <Compile Include="Utilities\Misc\UnsafeUtilities.cs" />
     <Compile Include="Core\Misc\CustomLogger.cs" />
     <Compile Include="Core\Misc\DataFormat.cs" />
@@ -259,15 +288,15 @@
     <Compile Include="Core\FormatterLocators\FormatterLocator.cs" />
     <Compile Include="Core\Misc\FormatterUtilities.cs" />
     <Compile Include="Unity Integration\DictionaryKeySupport\DictionaryKeyUtility.cs" />
-    <Compile Include="Core\Misc\PrefabModification.cs" />
-    <Compile Include="Core\Misc\PrefabModificationType.cs" />
+    <Compile Include="Unity Integration\PrefabModification.cs" />
+    <Compile Include="Unity Integration\PrefabModificationType.cs" />
     <Compile Include="Core\Misc\ProperBitConverter.cs" />
     <Compile Include="Core\Misc\SerializationUtility.cs" />
     <Compile Include="Unity Integration\UnitySerializationUtility.cs" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="..\Libraries\MSBuild\15.0\Bin\Microsoft.CSharp.targets" />
-  <PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration.Contains(`Disable Unity`))' != 'true'">
     <PostBuildEvent>call "$(SolutionDir)Libraries\PDB2MDB\pdb2mdb.exe" "$(TargetPath)"
 call del /a "$(TargetDir)*.pdb*"</PostBuildEvent>
   </PropertyGroup>
